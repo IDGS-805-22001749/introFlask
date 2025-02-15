@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request
+import forms
+
+
 
 app=Flask(__name__)
 
@@ -111,6 +114,22 @@ def Cinepolis():
 
     return render_template("cinepolis.html")
     
+
+@app.route("/alumnos", methods = ["GET", "POST"])
+def alumnos():
+    mat = ''
+    nom = ''
+    ape = ''
+    email = ''
+    alumno_clase = forms.UserForm(request.form)
+    if request.method == "POST":
+        mat = alumno_clase.matricula.data
+        ape = alumno_clase.apellido.data
+        nom = alumno_clase.nombre.data
+        email = alumno_clase.email.data
+        print('Nombre: {}'.format(nom))
+    
+    return render_template("Alumnos.html", form = alumno_clase)
 
 if __name__ == "__main__":
     app.run(debug=True, port=3000)
