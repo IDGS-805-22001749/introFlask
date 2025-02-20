@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import forms
-
+import formsZodiaco
+from datetime import datetime
 
 
 app=Flask(__name__)
@@ -110,7 +111,7 @@ def Cinepolis():
         tarjeta_cineco = request.form.get("tarjeta_cineco") == "si"
 
         resultado = cinepolis.procesar_venta(nombre, num_personas, total_boletos, tarjeta_cineco)
-        return resultado  # Devuelve el resultado directo como HTML
+        return resultado 
 
     return render_template("cinepolis.html")
     
@@ -122,14 +123,77 @@ def alumnos():
     ape = ''
     email = ''
     alumno_clase = forms.UserForm(request.form)
-    if request.method == "POST":
+    if request.method == "POST" and alumno_clase.validate():
         mat = alumno_clase.matricula.data
         ape = alumno_clase.apellido.data
         nom = alumno_clase.nombre.data
         email = alumno_clase.email.data
-        print('Nombre: {}'.format(nom))
+        
     
-    return render_template("Alumnos.html", form = alumno_clase)
+    return render_template("Alumnos.html", form = alumno_clase, mat = mat, ape = ape, nom = nom, email = email)
+
+
+def calcular_signo_chino(anio):
+    signos = ["Rata", "Buey", "Tigre", "Conejo", "Dragón", "Serpiente", "Caballo", "Cabra", "Mono", "Gallo", "Perro", "Cerdo"]
+    return signos[(anio - 1900) % 12]  # 1900 es el año de la Rata
+
+def obtener_imagen_chino(signo):
+    nombres_imagenes = {
+        "Rata": "Rata.png",
+        "Buey": "Buey.png",
+        "Tigre": "Tigre.png",
+        "Conejo": "Conejo.png",
+        "Dragón": "Dragon.png",
+        "Serpiente": "Serpiente.png",
+        "Caballo": "Caballo.png",
+        "Cabra": "Cabra.png",
+        "Mono": "Mono.png",
+        "Gallo": "Gallo.png",
+        "Perro": "Perro.png",
+        "Cerdo": "Cerdo.png"
+    }
+    return nombres_imagenes.get(signo, "default.png")
+
+def calcular_edad(dia, mes, anio):
+    hoy = datetime.today()
+    edad = hoy.year - anio - ((hoy.month, hoy.day) < (mes, dia))
+    return edad
+
+@app.route("/zodiaco", methods=["GET", "POST"])
+def zodiaco():
+    nom = ''
+    apep = ''
+    apem = ''
+    dia = ''
+    mes = ''
+    anio = ''
+    sexo = ''
+    signo = ''
+    imagen = ''
+    edad = ''
+    
+    generar_zodiaco = formsZodiaco.FormZodiaco(request.form)
+    
+    if request.method == "POST" and generar_zodiaco.validate():
+        nom = generar_zodiaco.nombre.data
+        apep = generar_zodiaco.apellido_paterno.data
+        apem = generar_zodiaco.apellido_materno.data
+        dia = generar_zodiaco.dia.data
+        mes = generar_zodiaco.mes.data
+        anio = generar_zodiaco.anio.data
+        sexo = generar_zodiaco.sexo.data
+        
+        signo = calcular_signo_chino(anio) 
+        imagen = obtener_imagen_chino(signo) 
+        edad = calcular_edad(dia, mes, anio)
+    
+    return render_template("zodiaco.html", 
+                           nom=nom, apep=apep, apem=apem, 
+                           dia=dia, mes=mes, anio=anio, 
+                           sexo=sexo, signo=signo, 
+                           imagen=imagen, edad=edad,
+                           form=generar_zodiaco)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=3000)

@@ -1,0 +1,51 @@
+{% import "_macros.html" as macros %}
+
+{% block container %}
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/styleZodiaco.css">
+
+<div class="container">
+    <h1>Signo Zodiaco Chino</h1>
+    <div class="content-wrapper">
+        
+        
+        <form action="" method="post" novalidate class="form-container">
+            <div class="control-group">
+                {{ macros.campoNuevo(form.nombre, class='form-control') }}
+            </div>
+            <div class="control-group">
+                {{ macros.campoNuevo(form.apellido_paterno, class='form-control') }}
+            </div>
+            <div class="control-group">
+                {{ macros.campoNuevo(form.apellido_materno, class='form-control') }}
+            </div>
+            <div class="control-group">
+                {{ macros.campoNuevo(form.dia, class='form-control') }}
+            </div>
+            <div class="control-group">
+                {{ macros.campoNuevo(form.mes, class='form-control') }}
+            </div>
+            <div class="control-group">
+                {{ macros.campoNuevo(form.anio, class='form-control') }}
+            </div>
+            <div class="control-group">
+                {{ macros.campoNuevo(form.sexo, class='form-control') }}
+            </div>
+
+            <input type="submit" value="Calcular Signo" class="btn btn-primary" />
+        </form>
+
+        
+        <div class="profile-container">
+            <img class="profile-image" src="{{ url_for('static', filename='img/' + imagen) }}" alt="{{ signo }}">
+            <div class="profile-info">
+                <h3>Hola: {{ nom }} {{ apep }} {{ apem }}</h3>
+                <p>Tienes: {{ edad }} años</p>
+                <p>Tu signo zodiacal chino es: <strong>{{ signo }}</strong></p>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}
