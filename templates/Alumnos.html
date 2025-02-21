@@ -6,6 +6,8 @@
 
 <h1>Alumnos</h1>
 <form action="" method="post" novalidate>
+    {{ csrf_token }}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     <div class="row control-gorup">
         <div class="form-groupfrom-group col-xs-12 floating-label-form-group ontrols">

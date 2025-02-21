@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+
+
+{% block container %}
+  <title>Error 404 - Página no encontrada</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #d32f2f;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+
+    a {
+      color: #1976d2;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+
+  <h1>Error 404</h1>
+  <p>Lo sentimos, la página que estás buscando no se ha encontrado.</p>
+  <p>Puedes volver a la <a href="/">página principal</a> o intentar buscar lo que necesitas:</p>
+  <form action="/search" method="GET">
+    <input type="text" name="q" placeholder="Buscar en el sitio">
+    <button type="submit">Buscar</button>
+  </form>
+  {% endblock %}
+
